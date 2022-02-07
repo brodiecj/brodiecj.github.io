@@ -13,7 +13,7 @@ let rightPressed = false;
 let leftPressed = false;
 let brickRowCount = 5;
 let brickColumnCount = 8;
-let brickWidth = 109; /* 75; is orginal width, but 120; looks better*/
+let brickWidth = 109; /* 75; is orginal width, but 120 looks better*/
 let brickHeight = 20;
 let brickPadding = 10;
 let brickOffsetTop = 30;
@@ -21,7 +21,10 @@ let brickOffsetLeft = 30;
 let ballColor = "#0095DD";
 let score = 0;
 let lives = 3;
-
+const pop = new Audio('Pop1.m4a');
+const kuh = new Audio('Kuh1.m4a');
+const ohNo = new Audio('Oh no!.m4a');
+const Tada = new Audio('Tada1.m4a');
 
 let bricks = [];
 for (let c = 0; c < brickColumnCount; c++) {
@@ -60,7 +63,7 @@ function mouseMoveHandler(e) {
     /*             if (relativeX > 0 && relativeX < canvas.width) {
         paddleX = relativeX - paddleWidth / 2;
     } original code allows paddle to go to far off screen*/
-    if (relativeX > 37.5 && relativeX < canvas.width - 37.5) {
+    if (relativeX > 38 && relativeX < canvas.width - 38) {
         paddleX = relativeX - paddleWidth / 2;
     }
 }
@@ -73,9 +76,11 @@ function collisionDetection() {
                 if (x > b.x && x < b.x + brickWidth && y > b.y && y < b.y + brickHeight) {
                     dy = -dy;
                     b.status = 0;
+                    kuh.play();
                     /*ballColor = randomColor;*/
                     score++; /*score = (score + 2); change the amount of pts awarded per brick broken*/
                     if (score === brickRowCount * brickColumnCount) {
+                        Tada.play();
                         alert("YOU WIN, CONGRATULATIONS!");
                         document.location.reload();
                     }
@@ -154,8 +159,10 @@ function draw() {
             /* dy = -dy * 1.2; substitution for code on same line;
                                increases speed of ball everytime it hits the paddle*/
         } else {
+            pop.play();
             lives--;
             if (!lives) {
+                ohNo.play();
                 alert("GAME OVER");
                 document.location.reload();
             } else {
